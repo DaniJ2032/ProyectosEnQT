@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f27fe8e7a3656d8fcb18.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "prueba1",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "prueba1::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-prueba1-Debug-28bcc6e1dce7ee15cbce.json",
+					"name" : "prueba1",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "prueba1_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-prueba1_autogen-Debug-4c8919dafbc2957d77d7.json",
+					"name" : "prueba1_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "prueba1_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-prueba1_autogen_timestamp_deps-Debug-ea80667f7d0bd4b6352c.json",
+					"name" : "prueba1_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug",
+		"source" : "C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/prueba1"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

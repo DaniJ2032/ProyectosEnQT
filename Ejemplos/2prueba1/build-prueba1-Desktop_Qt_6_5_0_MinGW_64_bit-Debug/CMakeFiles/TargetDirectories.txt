@@ -1,0 +1,9 @@
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/prueba1.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/install.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/prueba1_autogen_timestamp_deps.dir
+C:/Users/dajju/OneDrive/Escritorio/QT/prueba1/build-prueba1-Desktop_Qt_6_5_0_MinGW_64_bit-Debug/CMakeFiles/prueba1_autogen.dir
