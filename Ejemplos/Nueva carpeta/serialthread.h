@@ -2,22 +2,19 @@
 #define SERIALTHREAD_H
 
 #include <QObject>
-#include <QApplication>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include <QMutex>
 #include <QThread>
 #include <QtDebug>
 
-
-
+QSerialPort serialPort; //Objeto Serial
 class serialThread : public QThread
 {
     Q_OBJECT
 
 public:
-    serialThread(const QString& portName, QObject* parent = nullptr);
-    ~serialThread();
+    serialThread(QObject *parent = nullptr);
     void run() override;
 
 signals:
@@ -27,7 +24,7 @@ signals:
 //    void run() override;
 
 private:
-    QSerialPort* serialPort;
+//    QSerialPort serialPort;
     QByteArray data; //Cadena para recibir desde puerto
     QMutex mutex;
 };

@@ -21,10 +21,11 @@ private slots:
 
     void on_Iniciar_clicked();
     void on_Finalizar_clicked();
-    void on_listWidget_currentTextChanged(const QByteArray &currentText);
+    void on_listWidget_currentTextChanged(const QString &currentText);
 
 private:
     Ui::mainWidget *ui;
-    serialThread *mSerialThread;
+//    QSerialPort serialPort; //Objeto Serial
+    serialThread mSerialThread;
 };
 #endif // MAINWIDGET_H
