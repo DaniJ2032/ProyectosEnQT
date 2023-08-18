@@ -22,8 +22,11 @@ void MainWindow::RecibirArreglos(){
     QByteArray arreglo;
     arreglo = serial ->readLine();
     cadena = cadena+arreglo;
-    ui->plainTextEdit->appendPlainText(cadena); //Muestro lo recibido por puerto serie
-    cadena =""; //limpio cadena
+//    QByteArray byteArray = QByteArray::fromHex(cadena);
+//    ui->plainTextEdit->appendPlainText(QString::fromLatin1(byteArray)); //Muestro lo recibido por puerto serie
+//    byteArray =""; //limpio cadena
+    ui->plainTextEdit->appendPlainText(QString::fromUtf8(cadena));
+    cadena = "";
 }
 
 MainWindow::~MainWindow()

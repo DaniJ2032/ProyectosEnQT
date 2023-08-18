@@ -2,7 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QObject>
+#include <QApplication>
 #include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
+#include <QtDebug>
+
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,6 +29,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial; //Objeto Serial
-    QString cadena=""; //Cadena para recibir desde puerto
+    QByteArray cadena=""; //Cadena para recibir desde puerto
 };
 #endif // MAINWINDOW_H

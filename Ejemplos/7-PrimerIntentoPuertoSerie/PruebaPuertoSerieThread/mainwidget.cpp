@@ -32,7 +32,7 @@ void mainWidget::on_Iniciar_clicked(){
             const QString portName = portList.first().portName();
             mSerialThread = new serialThread("COM3", this);
 
-            connect(mSerialThread, &serialThread::dataReceived, this, &mainWidget::on_listWidget_currentTextChanged);
+            connect(mSerialThread, &serialThread::dataReceived, this, &mainWidget::appendDataToListWidget);
             mSerialThread->start();
 
         } else {
@@ -50,14 +50,14 @@ void mainWidget::on_Finalizar_clicked(){
         delete mSerialThread;
         mSerialThread = nullptr;
     }
+    ui->plainTextEdit->clear();
 }
 
-void mainWidget::on_listWidget_currentTextChanged(const QByteArray &currentText){
+void mainWidget::appendDataToListWidget(const QByteArray &currentText){
 //   ui->listWidget->addItem(QString(currentText));
 //   QString charString = QString::fromUtf8(currentText); // Convierte los bytes en una cadena de caracteres
-   ui->listWidget->addItem(QString::fromUtf8(currentText));
-
-
+//    QStringList lista = currentText.split('\x');
+   ui->plainTextEdit->appendPlainText(QString::fromUtf8(currentText));
 
 }
 

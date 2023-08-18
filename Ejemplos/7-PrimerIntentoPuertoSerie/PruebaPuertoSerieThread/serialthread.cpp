@@ -34,8 +34,12 @@ void serialThread::run() {
         if (serialPort->waitForReadyRead(1000)) {
             mutex.lock(); // Bloquea el mutex antes de acceder a la trama recibida
             data = serialPort->readAll(); // Lee la trama recibida
-            emit dataReceived(data);
+            msleep(10);
+            qDebug() << "Trama recibida: " << data;
+//            emit dataReceived(data);
             mutex.unlock(); // Desbloquea el mutex después de completar el acceso a la trama recibida
+            emit dataReceived(data);
+            data = "";
         }
     }
 

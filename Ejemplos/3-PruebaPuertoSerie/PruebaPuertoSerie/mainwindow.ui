@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>382</width>
-    <height>231</height>
+    <width>677</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>40</x>
       <y>20</y>
-      <width>301</width>
-      <height>141</height>
+      <width>601</width>
+      <height>331</height>
      </rect>
     </property>
    </widget>
@@ -30,8 +30,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>382</width>
-     <height>21</height>
+     <width>677</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuPrueba_Puerto_Serie">

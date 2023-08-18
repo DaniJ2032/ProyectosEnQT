@@ -21,7 +21,7 @@ private slots:
 
     void on_Iniciar_clicked();
     void on_Finalizar_clicked();
-    void on_listWidget_currentTextChanged(const QByteArray &currentText);
+    void appendDataToListWidget(const QByteArray &currentText);
 
 private:
     Ui::mainWidget *ui;
