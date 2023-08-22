@@ -2,8 +2,8 @@
 
 int main() {
     FILE *archivo;
-    archivo = fopen("datos.txt", "rb"); // Abre el archivo en modo lectura binaria
-
+    archivo = fopen("archivoComSerial.bin", "rb"); // Abre el archivo en modo lectura binaria
+    int  num = 0;
     if (archivo == NULL) {
         printf("No se pudo abrir el archivo.\n");
         return 1;
@@ -24,7 +24,13 @@ int main() {
     fclose(archivo); // Cierra el archivo
 
     for (long i = 0; i < archivo_tamano; i++) {
-        printf("%02x ", buffer[i]); // Imprime los datos en hexadecimal
+
+        num = num+1;
+        if (num>24){
+            printf("\n");
+            num = 0;
+        }
+        printf("%02x ",buffer[i]); // Imprime los datos en hexadecimal
     }
 
     free(buffer); // Libera la memoria del búfer

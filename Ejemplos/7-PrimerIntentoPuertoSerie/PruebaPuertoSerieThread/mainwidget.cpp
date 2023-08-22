@@ -57,7 +57,35 @@ void mainWidget::appendDataToListWidget(const QByteArray &currentText){
 //   ui->listWidget->addItem(QString(currentText));
 //   QString charString = QString::fromUtf8(currentText); // Convierte los bytes en una cadena de caracteres
 //    QStringList lista = currentText.split('\x');
-   ui->plainTextEdit->appendPlainText(QString::fromUtf8(currentText));
+
+    //************NO FUNCA EL DESGRACIADO************************
+//   ui->plainTextEdit->appendPlainText(QString::fromUtf8(currentText));
+
+    //*************FUNCA BIEN, MUESTRA EL VALOR EN HEX****************************
+//    QString tramaHex = currentText.toHex(' ');
+//    ui->plainTextEdit->appendPlainText(tramaHex);
+
+
+    QString decimalString;
+    for (int i = 0; i < currentText.size(); ++i) {
+        char byte = currentText.at(i);
+        int decimalValue = static_cast<unsigned char>(byte); // Convertir el byte a valor decimal
+        decimalString += QString::number(decimalValue) + " "; // Agregar el valor decimal a la cadena
+
+//        if ((i + 1) % 24 == 0 && i > 0) { // Agregar salto de línea cada 24 bytes
+//            decimalString += "\n";
+//        }
+    }
+    ui->plainTextEdit->appendPlainText(decimalString);
+
+    // Almacenar los valores decimales en un archivo .txt
+    QFile outputFile("trama_recibida.txt");
+    if (outputFile.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream outStream(&outputFile);
+        outStream << decimalString << "\n"; // Agregar los valores decimales al archivo
+        outputFile.close();
+    }
+
 
 }
 

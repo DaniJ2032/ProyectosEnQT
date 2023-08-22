@@ -63,66 +63,68 @@
 //     return 0;
 // }
 
+// 
+
 #include <stdio.h>
-#include <windows.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define NUM_FRAMES 910 // Cambia este valor para controlar cuántos frames se generan
 
 int main() {
-    HANDLE puerto_serie;
-    const char *nombre_puerto = "COM2"; // Cambia el nombre del puerto según corresponda
-    unsigned char contador = 0;
-    unsigned char info[22] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A,
-                              0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15};
+    srand(time(NULL)); // Inicializa la semilla del generador de números aleatorios
 
-    // Abre el puerto serie
-    puerto_serie = CreateFile(nombre_puerto, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-    if (puerto_serie == INVALID_HANDLE_VALUE) {
-        printf("Error al abrir el puerto serie.\n");
+    FILE *archivo_txt, *archivo_bin;
+    archivo_txt = fopen("datos.txt", "w"); // Abre el archivo en modo escritura
+    archivo_bin = fopen("datos.bin", "wb"); // Abre el archivo binario en modo escritura
+
+    if (archivo_txt == NULL || archivo_bin == NULL) {
+        printf("No se pudo abrir el archivo.\n");
         return 1;
     }
 
-    DCB dcbSerialParams = { 0 };
-    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
-    if (!GetCommState(puerto_serie, &dcbSerialParams)) {
-        printf("Error al obtener la configuración del puerto serie.\n");
-        CloseHandle(puerto_serie);
-        return 1;
-    }
+    for (int frame = 0; frame < NUM_FRAMES; frame++) {
+        // Genera valores aleatorios para las entradas/salidas analógicas y digitales
+        unsigned char contador = frame;
+        unsigned short entradas_analogicas[8];
+        unsigned short salidas_analogicas[2];
+        unsigned char entradas_digitales;
+        unsigned char salidas_digitales;
 
-    dcbSerialParams.BaudRate = CBR_9600; // Velocidad del puerto serie (9600 bps)
-    dcbSerialParams.ByteSize = 8;        // Tamaño de byte
-    dcbSerialParams.StopBits = ONESTOPBIT;
-    dcbSerialParams.Parity = NOPARITY;
-
-    if (!SetCommState(puerto_serie, &dcbSerialParams)) {
-        printf("Error al configurar el puerto serie.\n");
-        CloseHandle(puerto_serie);
-        return 1;
-    }
-
-    // for (int i = 0; i < 10; i++) { // Cambia este valor para controlar cuántas tramas se envían
-    //     }
-
-    while(1){    
-        unsigned char trama[24];
-        trama[0] = 0x1b;
-        trama[1] = contador;
-        memcpy(&trama[2], info, sizeof(info));
-
-        DWORD bytesEscritos;
-        if (!WriteFile(puerto_serie, trama, sizeof(trama), &bytesEscritos, NULL)) {
-            printf("Error al escribir en el puerto serie.\n");
-            CloseHandle(puerto_serie);
-            return 1;
+        for (int i = 0; i < 8; i++) {
+            entradas_analogicas[i] = rand() % 4097;
         }
 
-        contador++; // Incrementa el contador
-        Sleep(100); // Espera 1 segundo antes de enviar la siguiente trama
-        printf("Trama enviada \n");
+        for (int i = 0; i < 2; i++) {
+            salidas_analogicas[i] = rand() % 4097;
+        }
+
+        entradas_digitales = rand() % 256;
+        salidas_digitales = rand() % 256;
+
+        // Escribe los datos en el archivo .txt
+        fprintf(archivo_txt, "0x1b%02x", contador);
+        for (int i = 0; i < 8; i++) {
+            fprintf(archivo_txt, "%04x", entradas_analogicas[i]);
+        }
+        for (int i = 0; i < 2; i++) {
+            fprintf(archivo_txt, "%04x", salidas_analogicas[i]);
+        }
+        fprintf(archivo_txt, "%02x%02x\n", entradas_digitales, salidas_digitales);
+
+        // Escribe los datos en el archivo .bin
+        fwrite("\x1b", 1, 1, archivo_bin);
+        fwrite(&contador, 1, 1, archivo_bin);
+        fwrite(entradas_analogicas, sizeof(entradas_analogicas), 1, archivo_bin);
+        fwrite(salidas_analogicas, sizeof(salidas_analogicas), 1, archivo_bin);
+        fwrite(&entradas_digitales, 1, 1, archivo_bin);
+        fwrite(&salidas_digitales, 1, 1, archivo_bin);
     }
 
-    CloseHandle(puerto_serie); // Cierra el puerto serie
+    fclose(archivo_txt); // Cierra el archivo .txt
+    fclose(archivo_bin); // Cierra el archivo .bin
 
-    printf("Tramas enviadas exitosamente.\n");
+    printf("Archivos generados exitosamente.\n");
 
     return 0;
 }
