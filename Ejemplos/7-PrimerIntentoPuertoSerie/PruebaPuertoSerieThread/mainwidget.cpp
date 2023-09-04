@@ -62,8 +62,8 @@ void mainWidget::appendDataToListWidget(const QByteArray &currentText){
 //   ui->plainTextEdit->appendPlainText(QString::fromUtf8(currentText));
 
     //*************FUNCA BIEN, MUESTRA EL VALOR EN HEX****************************
-//    QString tramaHex = currentText.toHex(' ');
-//    ui->plainTextEdit->appendPlainText(tramaHex);
+    QString tramaHex = currentText.toHex(' ');
+    ui->plainTextEdit->appendPlainText(tramaHex);
 
 
     QString decimalString;
