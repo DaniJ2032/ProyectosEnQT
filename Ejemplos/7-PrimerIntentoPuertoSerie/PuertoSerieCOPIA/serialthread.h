@@ -8,8 +8,8 @@
 #include <QMutex>
 #include <QThread>
 #include <QtDebug>
-
-
+#include <QFile>
+#include <QTextStream>
 
 class serialThread : public QThread
 {

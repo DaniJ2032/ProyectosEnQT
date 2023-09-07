@@ -1,17 +1,24 @@
 #include "serialthread.h"
 
+/* El constructor de SerialReaderThread inicializa la instancia de la clase.
+   Recibe el nombre del puerto serie al que se conectará y crea una instancia
+   de QSerialPort configurada con la velocidad de baudios y otros parámetros.*/
 serialThread::serialThread(const QString& portName, QObject* parent) :
     QThread(parent), serialPort(new QSerialPort(portName))
 {
+    //Configuracion del puerto serie
     serialPort->setBaudRate(QSerialPort::Baud9600);
     serialPort->setDataBits(QSerialPort::Data8);
     serialPort->setParity(QSerialPort::NoParity);
     serialPort->setStopBits(QSerialPort::OneStop);
     serialPort->setFlowControl(QSerialPort::NoFlowControl);
 
-}   //fin de serialThread
+    // Registrar el tipo de metadatos charFrame_t para su manejo en QT
+    qRegisterMetaType<charFrame_t>("charFrame_t");
+}
 
-
+/* El destructor de SerialReaderThread se encarga de cerrar el puerto serie si está abierto
+   y eliminar la instancia de QSerialPort cuando el objeto se destruye.*/
 serialThread::~serialThread()
 {
     if (serialPort->isOpen()) {
@@ -20,34 +27,35 @@ serialThread::~serialThread()
     delete serialPort;
 }
 
-
+/* Este método es el punto de entrada del hilo SerialReaderThread. Aquí se configura el puerto
+   serie y se inicia la lectura de datos desde el puerto serie. Cuando se reciben datos, se
+   emite la señal dataReceived para que otros objetos puedan procesarlos.*/
 void serialThread::run() {
 
-    if (!serialPort->open(QIODevice::ReadOnly)) {
-        qDebug() << "No se pudo abrir el puerto serie" << serialPort->portName() << ":" << serialPort->errorString();
+    if (!serialPort->open(QIODevice::ReadOnly)) {   //Si no se puede abrir el puerto serie
+        qDebug() << "No se pudo abrir el puerto serie" << serialPort->portName()
+                 << ":" << serialPort->errorString();
         return;
     }
-
     qDebug() << "Conectado al puerto serie" << serialPort->portName();
 
+    frame_t receivedData;
+    charFrame_t charData;
+
     while (!isInterruptionRequested()) {
-        if (serialPort->waitForReadyRead(1000)) {
-            mutex.lock(); // Bloquea el mutex antes de acceder a la trama recibida
-            data += serialPort->read(24); // Lee la trama recibida
 
-            qDebug() << "\n Trama recibida: " << data;
-            emit dataReceived(data);
-            data.remove(0,24);
+        if (serialPort->waitForReadyRead(1)) {
 
-//            while(data.size() >= 24){
-//                qDebug() << "\n Trama recibida: " << data;
-//                emit dataReceived(data);
-//                data.remove(0,24);
-//            }
-            mutex.unlock(); // Desbloquea el mutex después de completar el acceso a la trama recibida
-//            emit dataReceived(data);
+            data = serialPort->read(sizeof (frame_t)); // Lee la trama de a 24 byte
+
+            if (data.size() == sizeof(frame_t)) {
+                memcpy(&receivedData, data.constData(), sizeof(frame_t));   //Copia la trama recibida a charData
+                memcpy(charData.tramaEntradaChar, data.constData(), sizeof(frame_t));
+                emit dataReceived(charData); // Emite la trama recibida
+            }
+            // Imprime la trama almacenada en charData en la consola
+            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t)).toHex();
+
         }
     }
-
-}
-
+} //fin del run()
