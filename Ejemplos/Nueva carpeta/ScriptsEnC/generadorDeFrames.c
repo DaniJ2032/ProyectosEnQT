@@ -1,11 +1,27 @@
+/*#########################################################################################*/
+/*##                                 GENERACION DE FRAMES                                ##*/
+/*##-------------------------------------------------------------------------------------##*/
+/*## En el siguiente script lo que se hace es generar los frame para ser enviados por el ##*/
+/*## puerto serie. La estructura de cada frame viene indicada por la cátedra de la       ##*/
+/*## siguiente manera: Cabecera + contador + info, donde                                 ##*/
+/*## Cabecera --> Valor fijo 0x1b                                                        ##*/
+/*## Contador --> Se incrementa con cada frame enviado, se usa para tener un control     ##*/
+/*## Info --> La misma contiene valores de entradas y salidas analógicas y digitales     ##*/
+/*## Para este ejemplo se almacenara cada frame en archivos .tex y .bin, el cual este    ##*/
+/*## último sera el que enviaremos por puerto serie mediante el software "realTerm"      ##*/
+/*## luego se realizara la comparación con lo generado con este script y lo almacenado   ##*/
+/*## con Qt, la cual debe ser exacta.                                                    ##*/
+/*## Autor: Jaurez Daniel, Sosa Nahuel, Torres Heber                                     ##*/
+/*## Curso: 5R1                                                                          ##*/
+/*## Catedra: Técnicas Digitales III                                                     ##*/
+/*## Año: 2023                                                                           ##*/
+/*#########################################################################################*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 
-/*#########################################################################################*/
-/*##                        DECLARACIÓN DE ESTRUCTURAS Y UNIONES                         ##*/
-/*#########################################################################################*/
-
+// Declaracion de estructuras y uniones 
 typedef struct {
   // Byte de caebcera.
   uint8_t start; 
@@ -37,35 +53,34 @@ typedef union
 } charFrame_t; //Fin de union
 
 //main principal
-int main( int argc, char *argv[])
-{
+int main( int argc, char *argv[]) {
+
   uint8_t start=0x1b; //Cabecera, siempre de valor fijo.
   uint16_t aIn1,aIn2,aIn3,aIn4,aIn5,aIn6,aIn7,aIn8; // 8 entradas analógicas.
   uint16_t aOut1,aOut2; // 2 salidas analógicas.
   uint8_t dIn;          // 8 entradas digitales.
   uint8_t dOut;         // 8 salidas digitales.
   frame_t tramaIn={0,0,0,0,0,0,0,0,0,0,0,0,0,0};  
-
   FILE *ptrArchTxt; // Puntero para los archivos
   FILE *ptrArchBin;
 
   // Imprime los tamaños de los nuevos tipos de datos.
   printf("\nTamaño de frame_t: %ld / tamaño de charFrame_t: %ld\n",sizeof(frame_t),sizeof(charFrame_t));
-
   //generacion de los archivos .txt y .bin 
   if( (ptrArchTxt=fopen("archivoComSerial.txt", "w"))==NULL || ((ptrArchBin=fopen("archivoComSerial.bin","wb"))==NULL) )
     printf("Error al abrir los archivos.\n");
   else
   {
     printf("Archivos creados. Escribiendo tramas...\n");
-    
-    tramaIn.start = start;
 
+    tramaIn.start = start;
     //Se generan 910 frame para obtener un archivo de 1 Mega
     for (int k = 0, j = 0; k < 910; k++, j++) {
+      
+
         tramaIn.count = j;
-        // genera valores rand para las entradas y salidas analog.
-        //se almacena cada valor random en cada variable  
+        // genera valores rand para las entradas y salidas analog se almacena cada valor random en cada variable  
+
         for (int i = 0, aIn = 0; i < 8; i++) {
             unsigned short aIn1 = 0 + rand() % 4095;
             switch (i) {
@@ -79,6 +94,7 @@ int main( int argc, char *argv[])
                 case 7: tramaIn.inA8 = aIn1; break;
             }
         }
+
         for (int i = 0, aOut = 0; i < 2; i++) {
             unsigned short aOut1 = 0 + rand() % 4095;
             switch (i) {
@@ -86,6 +102,7 @@ int main( int argc, char *argv[])
                 case 1: tramaIn.outA2 = aOut1; break;
             }
         }
+
         //generacion de rand para las saldias y entradas digitales.
         tramaIn.insDig = 0 + rand() % 255;
         tramaIn.outsDig = 0 + rand() % 255;
@@ -101,6 +118,8 @@ int main( int argc, char *argv[])
         if (j > 255)  //reset del contador
             j = 0;
     }
+
+
     //Cierre de los  punteros para los archivos.
     fclose(ptrArchTxt);
     fclose(ptrArchBin);

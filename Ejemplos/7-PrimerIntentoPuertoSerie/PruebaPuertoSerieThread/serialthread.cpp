@@ -3,6 +3,7 @@
 /* El constructor de SerialReaderThread inicializa la instancia de la clase.
    Recibe el nombre del puerto serie al que se conectará y crea una instancia
    de QSerialPort configurada con la velocidad de baudios y otros parámetros.*/
+
 serialThread::serialThread(const QString& portName, QObject* parent) :
     QThread(parent), serialPort(new QSerialPort(portName))
 {
@@ -14,7 +15,7 @@ serialThread::serialThread(const QString& portName, QObject* parent) :
     serialPort->setFlowControl(QSerialPort::NoFlowControl);
 
     // Registrar el tipo de metadatos charFrame_t para su manejo en QT
-    qRegisterMetaType<charFrame_t>("charFrame_t");
+    qRegisterMetaType<charFrame_t>("charFrame_t");  
 }
 
 /* El destructor de SerialReaderThread se encarga de cerrar el puerto serie si está abierto
@@ -42,6 +43,11 @@ void serialThread::run() {
     frame_t receivedData;
     charFrame_t charData;
 
+    /*
+
+    */
+
+
     while (!isInterruptionRequested()) {
 
         if (serialPort->waitForReadyRead(1)) {
@@ -54,7 +60,7 @@ void serialThread::run() {
                 emit dataReceived(charData); // Emite la trama recibida
             }
             // Imprime la trama almacenada en charData en la consola
-            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t)).toHex();
+            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t)).toHex().toInt();
 
         }
     }

@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui serialport #Agregado de serialport para reconocer la librería
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

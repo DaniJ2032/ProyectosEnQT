@@ -95,9 +95,11 @@ protected:
 //    void run() override;    //funcion void run() donde se ejecuta el hilo
 
 private:
-    QSerialPort* serialPort; // Puntero para serialPort
+    QSerialPort *serialPort; // Puntero para serialPort
     QByteArray data;        // Para recibir por puerto serie
 
 };
 
 #endif // SERIALTHREAD_H
+
+

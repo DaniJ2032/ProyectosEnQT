@@ -20,10 +20,7 @@ mainWidget::~mainWidget()
     delete ui;
 }
 
-/* Con el boton de inicio se incializa el hilo lector y se lista los puertos y se toma el que esta abierto,
-   a su vez se comecta la señál de la clase serialThread con el slot de appendDataToListWidget.
-   NOTA: En mSerialThread = new serialThread(portName, this); si se utiliza un simulador de puertos como
-   "virtual serial port" colocar en portName el puerto directamente emulado como por ejemplo "COM3" */
+/* Con el boton de inicio se incializa el hilo lector y se lista los puertos y se toma el que esta abierto,*/
 void mainWidget::on_Iniciar_clicked(){
 
     if (!mSerialThread) {
@@ -31,23 +28,21 @@ void mainWidget::on_Iniciar_clicked(){
         QList<QSerialPortInfo> portList = QSerialPortInfo::availablePorts();  // Se lista los puertos disponibles
 
         if (!portList.isEmpty()) {  // Se busca que puerto esta abierto
+
             const QString portName = portList.first().portName();   //Se almacena el puerto que esta abierto
             mSerialThread = new serialThread("COM3", this); // Se pasa el puerto a la clase serialThread
 
-            // Con connect se establece una señál entre y un private slot de esta manera cuando al señal se emite
-            // la ranura se ejecuta.
+            // Con connect se establece una señál entre y un private slot.
             connect(mSerialThread, &serialThread::dataReceived, this, &mainWidget::appendDataToListWidget);
             mSerialThread->start();
-
         } else {
             qDebug() << "No se encontraron puertos serie disponibles.";
         }
     }
 }
 
-/* Con el boton de finalizar se cierra el puerto y limpia el plainText,
-   espera que el hilo se termine de ejecutar y una vez terminado lo cierra
-   asi tambien como el puerto.*/
+
+/* Con el boton de finalizar se cierra el puerto y limpia el plainText.*/
 void mainWidget::on_Finalizar_clicked(){
 
     if(mSerialThread){
@@ -58,8 +53,7 @@ void mainWidget::on_Finalizar_clicked(){
     }
     ui->plainTextEdit->clear();
 }
-
-/* Este método se llama cuando se reciben datos y se encarga de mostrar los datos en una lista
+/* llama cuando se reciben datos y se encarga de mostrar los datos en una lista
    en la interfaz gráfica. También almacena los datos en archivos de texto y binarios.*/
 void mainWidget::appendDataToListWidget(const charFrame_t& data){
 
@@ -69,9 +63,7 @@ void mainWidget::appendDataToListWidget(const charFrame_t& data){
                 data.tramaEntrada.a5in, data.tramaEntrada.a6in, data.tramaEntrada.a7in, data.tramaEntrada.a8in,
                 data.tramaEntrada.a1out, data.tramaEntrada.a2out,
                 data.tramaEntrada.dIns, data.tramaEntrada.dOuts);
-
     ui->plainTextEdit->appendPlainText(str);    //Se imprime en plainText lo recibido en sus valores enteros
-
     // Almacenar la cadena en un archivo .txt
     QFile txtFile("datos.txt");
     if (txtFile.open(QIODevice::Append | QIODevice::Text)) {
@@ -79,7 +71,6 @@ void mainWidget::appendDataToListWidget(const charFrame_t& data){
         txtStream << str << "\n"; // Escribe la cadena en el archivo de texto y agrega una nueva línea
         txtFile.close();
     }
-
     // Almacenar los datos en un archivo .bin
     QFile binFile("datos.bin");
     if (binFile.open(QIODevice::Append)) {

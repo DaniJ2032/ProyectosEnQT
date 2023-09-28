@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::RecibirArreglos(){
     QByteArray arreglo;
-    arreglo = serial ->readLine();
+    arreglo = serial ->read(13);
     cadena = cadena+arreglo;
 //    QByteArray byteArray = QByteArray::fromHex(cadena);
 //    ui->plainTextEdit->appendPlainText(QString::fromLatin1(byteArray)); //Muestro lo recibido por puerto serie
