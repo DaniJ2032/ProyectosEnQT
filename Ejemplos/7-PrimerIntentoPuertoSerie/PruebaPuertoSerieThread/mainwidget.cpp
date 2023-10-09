@@ -30,7 +30,7 @@ void mainWidget::on_Iniciar_clicked(){
         if (!portList.isEmpty()) {  // Se busca que puerto esta abierto
 
             const QString portName = portList.first().portName();   //Se almacena el puerto que esta abierto
-            mSerialThread = new serialThread("COM3", this); // Se pasa el puerto a la clase serialThread
+            mSerialThread = new serialThread("COM6", this); // Se pasa el puerto a la clase serialThread
 
             // Con connect se establece una señál entre y un private slot.
             connect(mSerialThread, &serialThread::dataReceived, this, &mainWidget::appendDataToListWidget);

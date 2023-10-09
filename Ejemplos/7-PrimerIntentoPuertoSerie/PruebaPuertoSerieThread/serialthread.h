@@ -97,6 +97,8 @@ protected:
 private:
     QSerialPort *serialPort; // Puntero para serialPort
     QByteArray data;        // Para recibir por puerto serie
+    QByteArray dataBuffer;
+    unsigned int bytesReceived;
 
 };
 

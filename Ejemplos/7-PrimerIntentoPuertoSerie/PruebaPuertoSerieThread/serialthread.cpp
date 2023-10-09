@@ -43,24 +43,20 @@ void serialThread::run() {
     frame_t receivedData;
     charFrame_t charData;
 
-    /*
-
-    */
-
-
     while (!isInterruptionRequested()) {
 
-        if (serialPort->waitForReadyRead(1)) {
+        if (serialPort->waitForReadyRead(3000)) {
 
             data = serialPort->read(sizeof (frame_t)); // Lee la trama de a 24 byte
-
+            qDebug() << "\n Datos de puerto Serie: " << data;
+            qDebug() << "\n Tamaño de datos: " << data.size();
             if (data.size() == sizeof(frame_t)) {
                 memcpy(&receivedData, data.constData(), sizeof(frame_t));   //Copia la trama recibida a charData
                 memcpy(charData.tramaEntradaChar, data.constData(), sizeof(frame_t));
                 emit dataReceived(charData); // Emite la trama recibida
             }
             // Imprime la trama almacenada en charData en la consola
-            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t)).toHex().toInt();
+//            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t));
 
         }
     }

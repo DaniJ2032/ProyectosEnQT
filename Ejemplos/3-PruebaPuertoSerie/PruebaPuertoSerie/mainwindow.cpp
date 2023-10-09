@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     /*Configuracion inicial del puerto serial*/
     serial = new QSerialPort();
-    serial->setPortName("COM3");
+    serial->setPortName("COM6");
     serial->setBaudRate(QSerialPort::Baud9600);
     serial->setParity(QSerialPort::NoParity);
     serial->setDataBits(QSerialPort::Data8);
@@ -20,13 +20,15 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::RecibirArreglos(){
     QByteArray arreglo;
-    arreglo = serial ->read(13);
-    cadena = cadena+arreglo;
+    arreglo = serial ->readAll();
 //    QByteArray byteArray = QByteArray::fromHex(cadena);
 //    ui->plainTextEdit->appendPlainText(QString::fromLatin1(byteArray)); //Muestro lo recibido por puerto serie
 //    byteArray =""; //limpio cadena
-    ui->plainTextEdit->appendPlainText(QString::fromUtf8(cadena));
-    cadena = "";
+    qDebug() << "\nTrama recibida: " << arreglo;
+    qDebug() << "\nTamaño de cadena: " << arreglo.size();
+
+    ui->plainTextEdit->appendPlainText(arreglo.toHex());
+    arreglo.clear();
 }
 
 MainWindow::~MainWindow()
