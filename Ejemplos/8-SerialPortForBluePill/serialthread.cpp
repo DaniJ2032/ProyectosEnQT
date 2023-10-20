@@ -1,5 +1,7 @@
 #include "serialthread.h"
 
+bool headerDetected = false;
+
 /* El constructor de SerialReaderThread inicializa la instancia de la clase.
    Recibe el nombre del puerto serie al que se conectará y crea una instancia
    de QSerialPort configurada con la velocidad de baudios y otros parámetros.*/
@@ -16,6 +18,8 @@ serialThread::serialThread(const QString& portName, QObject* parent) :
 
     // Registrar el tipo de metadatos charFrame_t para su manejo en QT
     qRegisterMetaType<charFrame_t>("charFrame_t");
+    qRegisterMetaType<charTxFrame_t>("charTxFrame_t");
+
 }
 
 /* El destructor de SerialReaderThread se encarga de cerrar el puerto serie si está abierto
@@ -40,9 +44,6 @@ void serialThread::run() {
     }
     qDebug() << "Conectado al puerto serie" << serialPort->portName();
 
-    frame_t receivedData;
-    charFrame_t charData;
-
     dataBuffer.clear();
     bytesReceived = 0;
 
@@ -51,11 +52,22 @@ void serialThread::run() {
         if (serialPort->waitForReadyRead(3000)) {
 
             data = serialPort->read(1); // Lee la trama de a 24 byte
+
+            if (!headerDetected) {  // Esta funcion se activa una sola vez
+                // Si la cabecera no se ha detectado previamente, busca la cabecera en el búfer
+                headerPos = dataBuffer.indexOf(header);
+                if (headerPos != -1) {
+                    // Cabecera encontrada
+                    headerDetected = true;
+                    dataBuffer = dataBuffer.mid(headerPos); // Elimina los datos anteriores a la cabecera
+                }
+            }
             if (!data.isEmpty()){
                 dataBuffer.append(data);
-                bytesReceived++;
+                bytesReceived++;               
                 if (bytesReceived >= sizeof(frame_t)) {
                     if (dataBuffer.size() == sizeof(frame_t)) {
+                        qDebug() << "Tamaño trama: " << sizeof(frame_t);
                         qDebug() << "\n Trama armada: " << dataBuffer;
                         memcpy(&receivedData, dataBuffer.constData(), sizeof(frame_t));   //Copia la trama recibida a charData
                         memcpy(charData.tramaEntradaChar, dataBuffer.constData(), sizeof(frame_t));
@@ -66,9 +78,12 @@ void serialThread::run() {
                     }
                 }
             }
-            // Imprime la trama almacenada en charData en la consola
-//            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t));
-
         }
     }
 } //fin del run()
+
+//VER SI CREAR OTRA CLASE HIJA O CREAR OTRO HILO Y TRABAJAR ACA PARA EL ENVIO DE DATOS A LA BLUE PILL
+
+
+void serialThread::resetHeaderDetection(){ headerDetected = false; }
+

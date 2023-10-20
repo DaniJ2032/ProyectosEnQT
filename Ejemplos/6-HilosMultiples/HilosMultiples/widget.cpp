@@ -16,10 +16,9 @@ Widget::Widget(QWidget *parent)
     ui->dial->setValue(0);          //Valores iniciales
     ui->lcdNumber->display(0);
 
-    connect(mThread1, &DuThread::ValorCambiado, ui->progressBar,
-            &QProgressBar::setValue);
-    connect(mThread2, &DuThread::ValorCambiado, ui->dial,       //Conecto cada hilo con su corresp. front
-            &QDial::setValue);
+    connect(mThread1, &DuThread::ValorCambiado, ui->progressBar, &QProgressBar::setValue);
+
+    connect(mThread2, &DuThread::ValorCambiado, ui->dial, &QDial::setValue);       //Conecto cada hilo con su corresp. front
 
     connect(mThread3, &DuThread::ValorCambiado, ui->lcdNumber,
             static_cast<void (QLCDNumber::*)(int)>(&QLCDNumber::display));

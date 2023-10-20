@@ -21,55 +21,14 @@
 #include <QApplication>
 #include <QtSerialPort/QSerialPort> //Serial port
 #include <QtSerialPort/QSerialPortInfo>
+
 #include <QMutex>   // Bloqueo de datos
 #include <QThread>  // Manejo de hilos
 #include <QtDebug>  // Imprimir datos en consola
 #include <QFile>    // Guardado de datos en archivos
 #include <QTextStream> // manejo de datos en los archivos
 #include <QString>
-
-/*
- * Se definen una estructura frame_t para almacenar los datos de cada trama y
- * una unión charFrame_t que permite interpretar esos datos como un arreglo
- * de caracteres (char) para facilitar la lectura en archivos binarios. Esta
- * misma estructura se utiliza en el script de C utilizado para crear el archivo
- * a enviar por puerto serie.
-*/
-typedef struct
-{
-    // Byte de inicio.
-    uint8_t start;
-    // Contador.
-    uint8_t count;
-    // 8 entradas analógicas (12 bits).
-    uint16_t a1in;
-    uint16_t a2in;
-    uint16_t a3in;
-    uint16_t a4in;
-    uint16_t a5in;
-    uint16_t a6in;
-    uint16_t a7in;
-    uint16_t a8in;
-    // 2 salidas analógicas.
-    uint16_t a1out;
-    uint16_t a2out;
-    // 8 entradas digitales.
-    uint8_t dIns;
-    // 8 salidas digitales.
-    uint8_t dOuts;
-
-} frame_t;
-
-/* Esta es una unión llamada charFrame_t que se utiliza para interpretar los
-   datos de la estructura frame_t tanto como una estructura completa (tramaEntrada)
-   como una matriz de caracteres (tramaEntradaChar). Esta unión se utiliza para
-   manipular los datos en diferentes formatos.
-*/
-typedef union
-{
-    frame_t tramaEntrada;
-    char    tramaEntradaChar[24];
-} charFrame_t;
+#include <structsTxAndRx.h> // Estructuras para envio y recepcion
 
 
 /* Clase llamada SerialReaderThread, que hereda de QThread. Esta clase se utiliza para
@@ -85,6 +44,8 @@ public:
     serialThread(const QString& portName, QObject* parent = nullptr); // Constructor
     ~serialThread();                                                  // Destructor
     void run() override;
+    void frameHeaderOK(QByteArray data);    //Retorna TRUE si encontro cabecera
+    void resetHeaderDetection();            //Reset del detector de cabecera
 
 signals:
     /* Esta es una señal que se emite cuando se reciben datos en el hilo SerialReaderThread.
@@ -95,10 +56,17 @@ protected:
 //    void run() override;    //funcion void run() donde se ejecuta el hilo
 
 private:
+
+
     QSerialPort *serialPort; // Puntero para serialPort
     QByteArray data;        // Para recibir por puerto serie
-    QByteArray dataBuffer;
-    unsigned int bytesReceived;
+    QByteArray dataBuffer;  // Buffer para los frames
+    unsigned int bytesReceived; //Contador de trama
+
+    frame_t receivedData;   // Para almacenar los frame recibidos
+    charFrame_t charData;   // Para almacenar los frame recibidos
+    char header = '\x1B';   // Cabecera de la trama
+    int headerPos = -1;     // Posición de la cabecera en el búfer
 
 };
 

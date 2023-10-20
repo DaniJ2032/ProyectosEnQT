@@ -41,7 +41,6 @@ void mainWidget::on_Iniciar_clicked(){
     }
 }
 
-
 /* Con el boton de finalizar se cierra el puerto y limpia el plainText.*/
 void mainWidget::on_Finalizar_clicked(){
 
@@ -50,33 +49,106 @@ void mainWidget::on_Finalizar_clicked(){
         mSerialThread->wait();
         delete mSerialThread;
         mSerialThread = nullptr;
+        mSerialThread->resetHeaderDetection();
     }
 //    ui->plainTextEdit->clear();
 }
+
 /* llama cuando se reciben datos y se encarga de mostrar los datos en una lista
    en la interfaz gráfica. También almacena los datos en archivos de texto y binarios.*/
 void mainWidget::appendDataToListWidget(const charFrame_t& data){
 
-    QString str;
-    str.sprintf("%d %d %d %d %d %d %d %d %d %d %d %d %d %d ", data.tramaEntrada.start, data.tramaEntrada.count,
+
+    QString  strFrame;
+
+    uint8_t  uartCRC8 = data.tramaEntrada.crc8;
+    uint8_t  checkCRC8;
+
+    checkCRC8 = codeCRC8((uint8_t *)&data.tramaEntrada, sizeof (data.tramaEntrada)-2);
+
+    strFrame.sprintf("%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", data.tramaEntrada.start, data.tramaEntrada.count,
                 data.tramaEntrada.a1in, data.tramaEntrada.a2in, data.tramaEntrada.a3in, data.tramaEntrada.a4in,
                 data.tramaEntrada.a5in, data.tramaEntrada.a6in, data.tramaEntrada.a7in, data.tramaEntrada.a8in,
                 data.tramaEntrada.a1out, data.tramaEntrada.a2out,
-                data.tramaEntrada.dIns, data.tramaEntrada.dOuts);
-    ui->plainTextEdit->appendPlainText(str);    //Se imprime en plainText lo recibido en sus valores enteros
-    // Almacenar la cadena en un archivo .txt
-    QFile txtFile("datos.txt");
-    if (txtFile.open(QIODevice::Append | QIODevice::Text)) {
-        QTextStream txtStream(&txtFile);
-        txtStream << str << "\n"; // Escribe la cadena en el archivo de texto y agrega una nueva línea
-        txtFile.close();
+                data.tramaEntrada.dIns, data.tramaEntrada.dOuts, data.tramaEntrada.crc8);
+
+    QString crc8Text = QString("CRC8 recibido: %1  Calculado: %2").arg(uartCRC8).arg(checkCRC8);
+
+
+    ui->plainTextEdit->appendPlainText(strFrame);    //Se imprime en plainText lo recibido en sus valores enteros
+
+    double voltage[8];
+    float rangeanalogMax = 4095.0;
+    float voltageMax = 10.0;
+
+    voltage[0] = (static_cast<double>(data.tramaEntrada.a1in) / rangeanalogMax) * voltageMax;
+    voltage[1] = (static_cast<double>(data.tramaEntrada.a2in) / rangeanalogMax) * voltageMax;
+    voltage[2] = (static_cast<double>(data.tramaEntrada.a3in) / rangeanalogMax) * voltageMax;
+    voltage[3] = (static_cast<double>(data.tramaEntrada.a4in) / rangeanalogMax) * voltageMax;
+    voltage[4] = (static_cast<double>(data.tramaEntrada.a5in) / rangeanalogMax) * voltageMax;
+    voltage[5] = (static_cast<double>(data.tramaEntrada.a6in) / rangeanalogMax) * voltageMax;
+    voltage[6] = (static_cast<double>(data.tramaEntrada.a7in) / rangeanalogMax) * voltageMax;
+    voltage[7] = (static_cast<double>(data.tramaEntrada.a8in) / rangeanalogMax) * voltageMax;
+
+    for (int i = 0; i < 8; i++) {
+        // Calcula el nombre del LCD correspondiente (puede variar según tu implementación)
+        QString lcdName = QString("AN%1").arg(i + 1);
+
+        // Muestra el valor en el display correspondiente
+        QLCDNumber* lcd = this->findChild<QLCDNumber*>(lcdName);
+        if (lcd) {
+            lcd->display(QString::number(voltage[i], 'f', 2));
+        } else {
+            qDebug() << "No se encontró el LCD para" << lcdName;
+        }
     }
-    // Almacenar los datos en un archivo .bin
-    QFile binFile("datos.bin");
-    if (binFile.open(QIODevice::Append)) {
-        QDataStream binStream(&binFile);
-        binStream.writeRawData(data.tramaEntradaChar, sizeof(data.tramaEntradaChar)); // Escribe los datos binarios
-        binFile.close();
-    }
+
 }
 
+uint8_t mainWidget::codeCRC8(uint8_t *dataFrame, uint8_t longitud){
+
+    uint8_t polinomio_generador = 0x07; // Polinomio generador CRC-8 (0x07)
+    uint8_t reg_crc = 0; // Inicializa el registro CRC en cero
+
+    for (uint8_t i = 0; i < longitud; i++) { // Se recorre la estructura
+        reg_crc ^= dataFrame[i]; // Realiza un XOR con el byte actual
+
+        for (uint8_t j = 0; j < 8; j++) {
+
+            if (reg_crc & 0x80) {	// // Si el bit MSB = 1
+                /*se realiza una operación XOR con el polinomio generador y se
+                 * desplaza el registro CRC un bit a la izquierda*/
+                reg_crc = (reg_crc << 1) ^ polinomio_generador;
+
+             // Si el MSB = 0 Simplemente se desplaza 1 bit a la izquierda el reg_crc
+            }else reg_crc <<= 1;
+        }
+    }
+
+    return reg_crc;
+}
+
+
+//    if(checkCRC8 == data.tramaEntrada.crc8){
+//        ui->plainTextEdit->appendPlainText(crc8Text);
+//    }
+//    else {
+//        ui->plainTextEdit->appendPlainText("Error en trama recibida");
+//        ui->plainTextEdit->appendPlainText(crc8Text);
+//    }
+
+
+//     Almacenar la cadena en un archivo .txt
+//    QFile txtFile("datos.txt");
+//    if (txtFile.open(QIODevice::Append | QIODevice::Text)) {
+//        QTextStream txtStream(&txtFile);
+//        txtStream << str << "\n"; // Escribe la cadena en el archivo de texto y agrega una nueva línea
+//        txtFile.close();
+//    }
+//    // Almacenar los datos en un archivo .bin
+//    QFile binFile("datos.bin");
+//    if (binFile.open(QIODevice::Append)) {
+//        QDataStream binStream(&binFile);
+//        binStream.writeRawData(data.tramaEntradaChar, sizeof(data.tramaEntradaChar)); // Escribe los datos binarios
+//        binFile.close();
+//    }

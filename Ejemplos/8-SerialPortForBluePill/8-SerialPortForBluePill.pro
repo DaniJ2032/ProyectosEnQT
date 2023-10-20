@@ -15,7 +15,8 @@ SOURCES += \
 
 HEADERS += \
     mainwidget.h \
-    serialthread.h
+    serialthread.h \
+    structsTxAndRx.h
 
 FORMS += \
     mainwidget.ui

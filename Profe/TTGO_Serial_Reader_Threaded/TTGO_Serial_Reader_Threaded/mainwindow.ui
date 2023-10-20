@@ -523,6 +523,9 @@
         <property name="text">
          <string>PWM1</string>
         </property>
+        <property name="textFormat">
+         <enum>Qt::AutoText</enum>
+        </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
@@ -866,12 +869,12 @@
    <slot>setNum(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>677</x>
-     <y>133</y>
+     <x>801</x>
+     <y>154</y>
     </hint>
     <hint type="destinationlabel">
-     <x>747</x>
-     <y>200</y>
+     <x>801</x>
+     <y>259</y>
     </hint>
    </hints>
   </connection>
@@ -882,12 +885,12 @@
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>675</x>
-     <y>121</y>
+     <x>801</x>
+     <y>142</y>
     </hint>
     <hint type="destinationlabel">
-     <x>599</x>
-     <y>230</y>
+     <x>890</x>
+     <y>300</y>
     </hint>
    </hints>
   </connection>
@@ -898,8 +901,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>792</x>
-     <y>315</y>
+     <x>984</x>
+     <y>335</y>
     </hint>
     <hint type="destinationlabel">
      <x>712</x>

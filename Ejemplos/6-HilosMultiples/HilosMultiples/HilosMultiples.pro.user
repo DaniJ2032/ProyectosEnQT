@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 5.0.2, 2023-07-10T14:08:25. -->
+<!-- Written by QtCreator 5.0.2, 2023-10-17T00:04:11. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -240,8 +240,9 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:X:/Users/DaniBrem/Desktop/QT/Ejemplos/6-HilosMultiples/HilosMultiples/HilosMultiples.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">X:/Users/DaniBrem/Desktop/QT/Ejemplos/6-HilosMultiples/HilosMultiples/HilosMultiples.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">HilosMultiples2</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:X:/Users/DaniBrem/Desktop/ProyectosEnQT/Ejemplos/6-HilosMultiples/HilosMultiples/HilosMultiples.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">X:/Users/DaniBrem/Desktop/ProyectosEnQT/Ejemplos/6-HilosMultiples/HilosMultiples/HilosMultiples.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>

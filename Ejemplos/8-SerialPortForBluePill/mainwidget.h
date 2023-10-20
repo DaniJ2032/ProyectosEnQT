@@ -31,6 +31,8 @@ public:
     mainWidget(QWidget *parent = nullptr);  // Constructor
     ~mainWidget();                          // Destructor
 
+    uint8_t codeCRC8(uint8_t *dataFrame, uint8_t longitud);
+
 // slot privados, propio de los widget
 private slots:
 
@@ -38,10 +40,9 @@ private slots:
     void on_Finalizar_clicked();
     void appendDataToListWidget(const charFrame_t& data);
 
-// variables propias de la clase
 private:
-    Ui::mainWidget *ui;             // Puntero tipo mainWidget
-    serialThread *mSerialThread;    // Puntero de la clase serialThread
+    Ui::mainWidget *ui = nullptr;             // Puntero tipo mainWidget
+    serialThread *mSerialThread = nullptr;    // Puntero de la clase serialThread
 };
 
 #endif // MAINWIDGET_H

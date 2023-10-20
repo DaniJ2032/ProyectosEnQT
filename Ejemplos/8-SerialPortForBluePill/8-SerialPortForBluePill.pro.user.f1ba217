@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 5.0.2, 2023-10-13T22:44:03. -->
+<!-- Written by QtCreator 5.0.2, 2023-10-12T12:46:24. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{e75a4c7e-2dcc-4252-b971-1d48bb349dac}</value>
+  <value type="QByteArray">{f1ba2178-2567-4fa7-a4f4-b5609faf5625}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -85,9 +85,6 @@
     <valuelist type="QVariantList" key="ClangTools.SuppressedDiagnostics"/>
     <value type="bool" key="ClangTools.UseGlobalSettings">true</value>
    </valuemap>
-   <valuemap type="QVariantMap" key="CppEditor.QuickFix">
-    <value type="bool" key="UseGlobalSettings">true</value>
-   </valuemap>
   </valuemap>
  </data>
  <data>
@@ -102,8 +99,8 @@
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">X:\Users\DaniBrem\Documents\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Debug</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\dajju\OneDrive\Escritorio\ProyectosEnQT\Ejemplos\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Debug</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -140,8 +137,8 @@
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">X:\Users\DaniBrem\Documents\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Release</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Release</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\dajju\OneDrive\Escritorio\ProyectosEnQT\Ejemplos\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Release</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Release</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -180,8 +177,8 @@
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">X:\Users\DaniBrem\Documents\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Profile</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Profile</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\dajju\OneDrive\Escritorio\ProyectosEnQT\Ejemplos\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Profile</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Profile</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -240,15 +237,14 @@
     <valuelist type="QVariantList" key="CustomOutputParsers"/>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">8-SerialPortForBluePill2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:X:/Users/DaniBrem/Desktop/ProyectosEnQT/Ejemplos/8-SerialPortForBluePill/8-SerialPortForBluePill.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">X:/Users/DaniBrem/Desktop/ProyectosEnQT/Ejemplos/8-SerialPortForBluePill/8-SerialPortForBluePill.pro</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/8-SerialPortForBluePill/8-SerialPortForBluePill.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/8-SerialPortForBluePill/8-SerialPortForBluePill.pro</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Debug</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_32_bit-Debug</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
@@ -265,8 +261,8 @@
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">X:\Users\DaniBrem\Documents\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Debug</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\dajju\OneDrive\Escritorio\ProyectosEnQT\Ejemplos\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Debug</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Debug</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -303,8 +299,8 @@
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">X:\Users\DaniBrem\Documents\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Release</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Release</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\dajju\OneDrive\Escritorio\ProyectosEnQT\Ejemplos\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Release</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Release</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -343,8 +339,8 @@
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
     <value type="int" key="EnableQmlDebugging">0</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">X:\Users\DaniBrem\Documents\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Profile</value>
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">X:/Users/DaniBrem/Documents/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Profile</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">C:\Users\dajju\OneDrive\Escritorio\ProyectosEnQT\Ejemplos\build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Profile</value>
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory.shadowDir">C:/Users/dajju/OneDrive/Escritorio/ProyectosEnQT/Ejemplos/build-8-SerialPortForBluePill-Desktop_Qt_5_12_12_MinGW_64_bit-Profile</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
