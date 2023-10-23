@@ -30,7 +30,6 @@
 #include <QString>
 #include <structsTxAndRx.h> // Estructuras para envio y recepcion
 
-
 /* Clase llamada SerialReaderThread, que hereda de QThread. Esta clase se utiliza para
    leer datos desde un puerto serie en un hilo separado. Se configura para que cuando
    se reciban datos, emita una señal dataReceived que enviará la estructura charFrame_t
@@ -41,22 +40,26 @@ class serialThread : public QThread //Clase serialThread para el puerto serie
     Q_OBJECT
 
 public:
-    serialThread(const QString& portName, QObject* parent = nullptr); // Constructor
+    serialThread(QSerialPort* serialPort, QObject* parent = nullptr); // Constructor
     ~serialThread();                                                  // Destructor
     void run() override;
     void frameHeaderOK(QByteArray data);    //Retorna TRUE si encontro cabecera
     void resetHeaderDetection();            //Reset del detector de cabecera
+    bool frameTrasmiter(void);
 
 signals:
     /* Esta es una señal que se emite cuando se reciben datos en el hilo SerialReaderThread.
        La señal lleva como argumento la estructura charFrame_t que contiene los datos recibidos.*/
     void dataReceived(const charFrame_t &data);
+    void dataTransmiter(const charTxFrame_t &data);
 
 protected:
 //    void run() override;    //funcion void run() donde se ejecuta el hilo
 
 private:
 
+//    txFrame_t txData;
+    charTxFrame_t chartxData;
 
     QSerialPort *serialPort; // Puntero para serialPort
     QByteArray data;        // Para recibir por puerto serie
@@ -65,8 +68,11 @@ private:
 
     frame_t receivedData;   // Para almacenar los frame recibidos
     charFrame_t charData;   // Para almacenar los frame recibidos
+
     char header = '\x1B';   // Cabecera de la trama
     int headerPos = -1;     // Posición de la cabecera en el búfer
+    bool generateFrameTx = true;
+
 
 };
 

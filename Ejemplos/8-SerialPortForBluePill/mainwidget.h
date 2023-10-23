@@ -14,6 +14,7 @@
 #include <QWidget>
 #include "serialthread.h"
 
+
 /* La clase MainWindow es una ventana de la interfaz gráfica principal de la aplicación.
    También hereda de QWidget. Contiene varios elementos de la interfaz de usuario,
    incluyendo botones y una lista para mostrar datos.*/
@@ -40,9 +41,14 @@ private slots:
     void on_Finalizar_clicked();
     void appendDataToListWidget(const charFrame_t& data);
 
+    void appendDataToListWidgetTx(const charTxFrame_t& data);
+
 private:
     Ui::mainWidget *ui = nullptr;             // Puntero tipo mainWidget
+
     serialThread *mSerialThread = nullptr;    // Puntero de la clase serialThread
+    QSerialPort *serialPort = nullptr;
+
 };
 
 #endif // MAINWIDGET_H

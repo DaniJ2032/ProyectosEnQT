@@ -6,6 +6,13 @@ mainWidget::mainWidget(QWidget *parent) : QWidget(parent) , ui(new Ui::mainWidge
     mSerialThread(nullptr)
 {
     ui->setupUi(this);
+    serialPort = new QSerialPort;
+    serialPort->setBaudRate(QSerialPort::Baud9600);
+    serialPort->setDataBits(QSerialPort::Data8);
+    serialPort->setParity(QSerialPort::NoParity);
+    serialPort->setStopBits(QSerialPort::OneStop);
+    serialPort->setFlowControl(QSerialPort::NoFlowControl);
+
 }
 
 /* El destructor de MainWindow se encarga de detener el hilo SerialReaderThread y liberar
@@ -17,28 +24,30 @@ mainWidget::~mainWidget()
         mSerialThread->wait();
         delete mSerialThread;
     }
+
     delete ui;
 }
 
 /* Con el boton de inicio se incializa el hilo lector y se lista los puertos y se toma el que esta abierto,*/
 void mainWidget::on_Iniciar_clicked(){
 
-    if (!mSerialThread) {
         // Configurar y crear el hilo del lector serie con el puerto serie seleccionado
         QList<QSerialPortInfo> portList = QSerialPortInfo::availablePorts();  // Se lista los puertos disponibles
 
         if (!portList.isEmpty()) {  // Se busca que puerto esta abierto
 
             const QString portName = portList.first().portName();   //Se almacena el puerto que esta abierto
-            mSerialThread = new serialThread(portName, this); // Se pasa el puerto a la clase serialThread
+            QSerialPort *serialPort = new QSerialPort(portName);
 
+            mSerialThread = new serialThread(serialPort, this); // Se pasa el puerto a la clase serialThread
             // Con connect se establece una señál entre y un private slot.
             connect(mSerialThread, &serialThread::dataReceived, this, &mainWidget::appendDataToListWidget);
+            connect(mSerialThread, &serialThread::dataTransmiter, this, &mainWidget::appendDataToListWidgetTx);
             mSerialThread->start();
+
         } else {
             qDebug() << "No se encontraron puertos serie disponibles.";
         }
-    }
 }
 
 /* Con el boton de finalizar se cierra el puerto y limpia el plainText.*/
@@ -51,6 +60,7 @@ void mainWidget::on_Finalizar_clicked(){
         mSerialThread = nullptr;
         mSerialThread->resetHeaderDetection();
     }
+
 //    ui->plainTextEdit->clear();
 }
 
@@ -60,10 +70,8 @@ void mainWidget::appendDataToListWidget(const charFrame_t& data){
 
 
     QString  strFrame;
-
     uint8_t  uartCRC8 = data.tramaEntrada.crc8;
     uint8_t  checkCRC8;
-
     checkCRC8 = codeCRC8((uint8_t *)&data.tramaEntrada, sizeof (data.tramaEntrada)-2);
 
     strFrame.sprintf("%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d", data.tramaEntrada.start, data.tramaEntrada.count,
@@ -74,8 +82,7 @@ void mainWidget::appendDataToListWidget(const charFrame_t& data){
 
     QString crc8Text = QString("CRC8 recibido: %1  Calculado: %2").arg(uartCRC8).arg(checkCRC8);
 
-
-    ui->plainTextEdit->appendPlainText(strFrame);    //Se imprime en plainText lo recibido en sus valores enteros
+    ui->plainTextEdit->appendPlainText("Trama recibida: " + strFrame + "\r\n");    //Se imprime en plainText lo recibido en sus valores enteros
 
     double voltage[8];
     float rangeanalogMax = 4095.0;
@@ -104,6 +111,19 @@ void mainWidget::appendDataToListWidget(const charFrame_t& data){
     }
 
 }
+
+void mainWidget::appendDataToListWidgetTx(const charTxFrame_t& data){
+
+    QString strFrameTx;
+
+    strFrameTx.sprintf("Trama Enviada: %d %d %d %d %d %d \r\n", data.tramaEnvio.start,
+                    data.tramaEnvio.count, data.tramaEnvio.a1out,
+                    data.tramaEnvio.a2out, data.tramaEnvio.dOuts, data.tramaEnvio.crc8);
+
+    ui->plainTextEdit->appendPlainText(strFrameTx);
+}
+
+
 
 uint8_t mainWidget::codeCRC8(uint8_t *dataFrame, uint8_t longitud){
 
