@@ -47,7 +47,7 @@ void serialThread::run() {
 
         if (serialPort->waitForReadyRead(3000)) {
 
-            data = serialPort->read(sizeof (frame_t)); // Lee la trama de a 24 byte
+            data = serialPort->readAll(); // Lee la trama de a 24 byte
             qDebug() << "\n Datos de puerto Serie: " << data;
             qDebug() << "\n Tamaño de datos: " << data.size();
             if (data.size() == sizeof(frame_t)) {

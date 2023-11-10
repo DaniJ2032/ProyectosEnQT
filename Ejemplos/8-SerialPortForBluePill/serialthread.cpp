@@ -70,6 +70,7 @@ void serialThread::run() {
 //                        qDebug() << "\n Trama armada: " << dataBuffer;
                         memcpy(&receivedData, dataBuffer.constData(), sizeof(frame_t));   //Copia la trama recibida a charData
                         memcpy(charData.tramaEntradaChar, dataBuffer.constData(), sizeof(frame_t));
+                        // DEBERIA MOVER ACA EL CRC8
                         emit dataReceived(charData); // Emite la trama recibida
 //                        qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t));
                         dataBuffer.clear();
