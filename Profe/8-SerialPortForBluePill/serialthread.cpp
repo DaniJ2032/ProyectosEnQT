@@ -2,7 +2,6 @@
 
 bool headerDetected = false;
 
-/* Constructor */
 serialThread::serialThread(QSerialPort* serialPort, QObject* parent) :
     QThread(parent), serialPort(serialPort){
     // Registrar el tipo de metadatos charFrame_t para su manejo en QT
@@ -11,7 +10,6 @@ serialThread::serialThread(QSerialPort* serialPort, QObject* parent) :
     qRegisterMetaType<charTxFrame_t>("charTxFrame_t");
 }
 
-/* Destructor */
 serialThread::~serialThread() {
 
     if (serialPort->isOpen()) {
@@ -20,7 +18,6 @@ serialThread::~serialThread() {
     delete serialPort;
 }
 
-/* Funcion run() para la ejecucion del hilo*/
 void serialThread::run() {
 
     if (!serialPort->open(QIODevice::ReadWrite)) {   //Si no se puede abrir el puerto serie
@@ -30,55 +27,47 @@ void serialThread::run() {
     }
     qDebug() << "Conectado al puerto serie" << serialPort->portName();
 
-    dataBuffer.clear();
-    bytesReceived = 0;
 
     while (!isInterruptionRequested()) {
 
         if (serialPort->waitForReadyRead(10)) {
+            if (serialPort->bytesAvailable() >= sizeof(frame_t)) {
+                data.resize(sizeof(frame_t));
+                data = serialPort->read(sizeof(frame_t)); // Lee la trama de a 24 byte
+                if (data.size() == sizeof(frame_t)) {
+//                    qDebug() << "\n Trama armada: " << data;
+                    memcpy(charData.tramaEntradaChar, data.constData(), sizeof(frame_t));
+                    frameTrasmiter();
 
+                    emit dataReceived(charData); // Emite la trama recibida
+    //              qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t));
 
-            data = serialPort->read(1); // Lee la trama de a 24 byte
-
-            if (!headerDetected) {  // Esta funcion se activa una sola vez
-                // Si la cabecera no se ha detectado previamente, busca la cabecera en el búfer
-                headerPos = dataBuffer.indexOf(header);
-                if (headerPos != -1) {
-                    // Cabecera encontrada
-                    headerDetected = true;
-                    dataBuffer = dataBuffer.mid(headerPos); // Elimina los datos anteriores a la cabecera
-                }
-            }
-            if (!data.isEmpty()){
-                dataBuffer.append(data);
-                bytesReceived++;
-                if (bytesReceived >= sizeof(frame_t)) {
-                    if (dataBuffer.size() == sizeof(frame_t)) {
-//                        qDebug() << "Tamaño trama: " << sizeof(frame_t);
-//                        qDebug() << "\n Trama armada: " << dataBuffer;
-                        memcpy(charData.tramaEntradaChar, dataBuffer.constData(), sizeof(frame_t));
-                        emit dataReceived(charData); // Emite la trama recibida
-//                       qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t));
-                        dataBuffer.clear();
-                        bytesReceived = 0;
-                        serialPort->clear();
-                        headerDetected = false;
+                }else{
+                    for(int i = 0 ; 10000000000; i++ ){
+                        bufferclear();
                     }
-                }
-            }
+               }
 
-        }
-        //Fin de if (serialPort->waitForReadyRead(1))
+            }else{
+                for(int i = 0 ; 10000000000; i++ ){
+                    bufferclear();
+                }
+           }
+
+        }else{
+            for(int i = 0 ; 10000000000; i++ ){
+                bufferclear();
+            }
+       }
+
         usleep(1);
     }
-    serialPort->clear();
+    serialPort->close();
 
 } //fin del run()
 
-/* reset de la bandera para la deteccion de la cabecera*/
-void serialThread::resetHeaderDetection(){ headerDetected = false; }
 
-/* Para testeo, se imprime la trama recibida */
+//ver que imrpima solo cuando envia
 QString serialThread::printToFrameRx(){
 
     QString  strFrame;
@@ -99,7 +88,7 @@ QString serialThread::printToFrameRx(){
     }
 }
 
-/* Para testeo, se imprime la trama enviada */
+//ver que imprima siempre que se recibe
 QString serialThread::printToFrameTx(){
 
     QString strFrameTx;
@@ -110,13 +99,16 @@ QString serialThread::printToFrameTx(){
 return strFrameTx;
 }
 
-/* Trama para transmitir */
-void serialThread::frameTrasmiter(){
+
+//SACAR EL BOOL
+bool serialThread::frameTrasmiter(){
+
 
         static unsigned char countTx = 0;
 
+
         chartxData.tramaEnvio.start = 0x1B; // Cabecera
-        chartxData.tramaEnvio.count = countTx;//countTx;  // Contador
+        chartxData.tramaEnvio.count = 0x01;//countTx;  // Contador
         chartxData.tramaEnvio.a1out = DialA1;   // -> Tiene que venir del dial
         chartxData.tramaEnvio.a2out = DialA2;   // -> Tiene que venir del dial
         chartxData.tramaEnvio.dOuts = valorSalidasDigitales; // -> tiene que venir de botontes
@@ -127,15 +119,19 @@ void serialThread::frameTrasmiter(){
         QByteArray byteArray(reinterpret_cast<const char*>(&chartxData), sizeof(txFrame_t));
 
         if(serialPort->write(byteArray) == sizeof (txFrame_t)){
+
             emit dataTransmiter(chartxData);
+//            qDebug() << "Enviando trama: " << byteArray;
         }
         else{
-            qDebug() << "No se envio trama: " << byteArray;
+//            qDebug() << "No se envio trama: " << byteArray;
         }
-        while (serialPort->waitForBytesWritten(10)){}       
+        while (serialPort->waitForBytesWritten(10)){}
+
+
+    return true;
 }
 
-/* Lectura del valor de los botones */
 void serialThread::readButtonValue(uint8_t* arrayBotones){
 
     valorSalidasDigitales = 0;
@@ -147,7 +143,6 @@ void serialThread::readButtonValue(uint8_t* arrayBotones){
     frameTrasmiter();
 }
 
-/* Lectura de los valores de los Diales*/
 void serialThread::readDialDAC(uint8_t value, uint8_t numDial){
 
     if(numDial == 0){
@@ -161,7 +156,6 @@ void serialThread::readDialDAC(uint8_t value, uint8_t numDial){
     frameTrasmiter();
 }
 
-/* Actualizacion de los display Analogicos*/
 double* serialThread::updateADisplay(){
 
     static double voltage[8];
@@ -180,7 +174,6 @@ double* serialThread::updateADisplay(){
   return voltage;
 }
 
-/* Actualizacion de los display digitales */
 bool* serialThread::updateDigDisplay(){
 
     static bool bits[8];
@@ -191,7 +184,6 @@ bool* serialThread::updateDigDisplay(){
     return bits;
 }
 
-/* Obtencion del CRC8 */
 uint8_t serialThread::codeCRC8(uint8_t *dataFrame, uint8_t longitud){
 
     uint8_t polinomio_generador = 0x07; // Polinomio generador CRC-8 (0x07)
@@ -215,3 +207,10 @@ uint8_t serialThread::codeCRC8(uint8_t *dataFrame, uint8_t longitud){
     return reg_crc;
 }
 
+
+void serialThread::bufferclear(){
+
+    if (serialPort->isOpen()) {
+        serialPort->clear();
+    }
+}

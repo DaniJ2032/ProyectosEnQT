@@ -1,23 +1,13 @@
-/*#########################################################################################*/
-/*##                                    Head principal                                   ##*/
-/*##-------------------------------------------------------------------------------------##*/
-/*## Es la cabecera principal del pgrogama y representa a la clase padre del sistema.    ##*/
-/*## Dentro de la clase mainWidget se tiene declarado los botones de Inicio, Fin y una   ##*/
-/*## Lista en donde se imprimirá lo recibido por el puerto serie, a su vez se almacenará ##*/
-/*## lo recibidio para su posterior comparacion.                                         ##*/
-/*#########################################################################################*/
-
 
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <QWidget>
 #include "serialthread.h"
-
-
-/* La clase MainWindow es una ventana de la interfaz gráfica principal de la aplicación.
-   También hereda de QWidget. Contiene varios elementos de la interfaz de usuario,
-   incluyendo botones y una lista para mostrar datos.*/
+#include <QWidget>
+#include <QDateTime>
+#include <QStateMachine>
+#include <QPushButton>
+#include <QState>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class mainWidget; }
@@ -32,23 +22,29 @@ public:
     mainWidget(QWidget *parent = nullptr);  // Constructor
     ~mainWidget();                          // Destructor
 
-    uint8_t codeCRC8(uint8_t *dataFrame, uint8_t longitud);
-
-// slot privados, propio de los widget
 private slots:
 
-    void on_Iniciar_clicked();
-    void on_Finalizar_clicked();
-    void appendDataToListWidget(const charFrame_t& data);
-
-    void appendDataToListWidgetTx(const charTxFrame_t& data);
+    void on_Iniciar_clicked();          // Boton de inicio
+    void on_Finalizar_clicked();        // Boton de finalizar
+    void sistemInit();                  // Inicio del sistema
+    void appendDataToListWidget();      // Imrpimir las tramas
+    void inicializarUI();               // Seteo de los botones y diales
+    void updateDisplayDigital();        // Actauliza display Digitales
+    void updateAnalogDisplay();         // Actualiza los display analogicos
+    void updateDataButonsAndDials();    // Actualiza estado de los botones y diales
+    uint8_t* getButtonStates();         // Obtener valores de botones
+    uint8_t setdailAnalog1();           // Obtener valores de Dial1
+    uint8_t setdailAnalog2();           // Obtener valores del Dial2
 
 private:
-    Ui::mainWidget *ui = nullptr;             // Puntero tipo mainWidget
 
-    serialThread *mSerialThread = nullptr;    // Puntero de la clase serialThread
-    QSerialPort *serialPort = nullptr;
-
+    Ui::mainWidget *ui = nullptr;           // Puntero tipo mainWidget
+    serialThread *mSerialThread = nullptr;  // Puntero de la clase serialThread
+    QSerialPort *serialPort = nullptr;      // Puntero serial port
+    QList<QPushButton*> buttons;            // Vector de botones
+    QList<QStateMachine*> machines;         // Maquina de estados
+    bool readyToSendData;                   // bandera para envio de datos
+    QTimer *timer;                          // puntero para tiempo
 };
 
 #endif // MAINWIDGET_H

@@ -27,6 +27,7 @@
 #include <QFile>    // Guardado de datos en archivos
 #include <QTextStream> // manejo de datos en los archivos
 #include <QString>
+#include <QTimer>
 
 /*
  * Se definen una estructura frame_t para almacenar los datos de cada trama y
@@ -35,8 +36,8 @@
  * misma estructura se utiliza en el script de C utilizado para crear el archivo
  * a enviar por puerto serie.
 */
-// Struct para recepcion de frames
-typedef struct {
+typedef struct
+{
     // Byte de inicio.
     uint8_t start;
     // Contador.
@@ -57,13 +58,18 @@ typedef struct {
     uint8_t dIns;
     // 8 salidas digitales.
     uint8_t dOuts;
-    // codigo de redundancia ciclica 8
-    uint8_t crc8;
+
 } frame_t;
 
-typedef union {
+/* Esta es una unión llamada charFrame_t que se utiliza para interpretar los
+   datos de la estructura frame_t tanto como una estructura completa (tramaEntrada)
+   como una matriz de caracteres (tramaEntradaChar). Esta unión se utiliza para
+   manipular los datos en diferentes formatos.
+*/
+typedef union
+{
     frame_t tramaEntrada;
-    char    tramaEntradaChar[25];
+    char    tramaEntradaChar[24];
 } charFrame_t;
 
 

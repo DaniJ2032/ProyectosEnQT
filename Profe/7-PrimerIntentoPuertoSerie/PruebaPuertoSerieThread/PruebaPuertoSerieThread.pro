@@ -15,8 +15,7 @@ SOURCES += \
 
 HEADERS += \
     mainwidget.h \
-    serialthread.h \
-    structsTxAndRx.h
+    serialthread.h
 
 FORMS += \
     mainwidget.ui
@@ -27,11 +26,3 @@ QMAKE_CXXFLAGS += -std=gnu++14 #Agregado del estadnar 14
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-DISTFILES += \
-    8-SerialPortForBluePill.pro.user
-
-RESOURCES += \
-    Leds.qrc
-
-ICON = "utn.png"

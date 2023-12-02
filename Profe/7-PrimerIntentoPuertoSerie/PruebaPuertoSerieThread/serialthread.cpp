@@ -8,7 +8,7 @@ serialThread::serialThread(const QString& portName, QObject* parent) :
     QThread(parent), serialPort(new QSerialPort(portName))
 {
     //Configuracion del puerto serie
-    serialPort->setBaudRate(QSerialPort::Baud115200);
+    serialPort->setBaudRate(QSerialPort::Baud9600);
     serialPort->setDataBits(QSerialPort::Data8);
     serialPort->setParity(QSerialPort::NoParity);
     serialPort->setStopBits(QSerialPort::OneStop);
@@ -45,19 +45,21 @@ void serialThread::run() {
 
     while (!isInterruptionRequested()) {
 
-        if (serialPort->waitForReadyRead(3000)) {
+        if (serialPort->waitForReadyRead(10)) {
+            if (serialPort->bytesAvailable() >= sizeof(receivedData)) {
+                data.resize(sizeof(frame_t));
+                int bytesRead = serialPort->read(data.data(), sizeof(frame_t)); // Lee la trama de a 24 byte
+                qDebug() << "\n Datos de puerto Serie: " << data;
+                qDebug() << "\n Tamaño de datos: " << data.size();
+                if (bytesRead == sizeof(frame_t) && static_cast<unsigned char>(data.at(0)) == 0x1b) {
+//                    memcpy(&receivedData, data.constData(), sizeof(frame_t));   //Copia la trama recibida a charData
+                    memcpy(charData.tramaEntradaChar, data.constData(), sizeof(frame_t));
+                    emit dataReceived(charData); // Emite la trama recibida
+                }
 
-            data = serialPort->readAll(); // Lee la trama de a 24 byte
-            qDebug() << "\n Datos de puerto Serie: " << data;
-            qDebug() << "\n Tamaño de datos: " << data.size();
-            if (data.size() == sizeof(frame_t)) {
-                memcpy(&receivedData, data.constData(), sizeof(frame_t));   //Copia la trama recibida a charData
-                memcpy(charData.tramaEntradaChar, data.constData(), sizeof(frame_t));
-                emit dataReceived(charData); // Emite la trama recibida
-            }
             // Imprime la trama almacenada en charData en la consola
 //            qDebug() << "\n Trama recibida: " << QByteArray(charData.tramaEntradaChar, sizeof(frame_t));
-
+            }
         }
     }
 } //fin del run()
