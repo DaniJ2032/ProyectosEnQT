@@ -1,9 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+/* Librerias */
 #include <QMainWindow>
 #include <QSaveFile>
 #include <QSerialPort>
+#include <QMessageBox>
+#include <iostream>
+#include <QFileInfo>
+#include<QDebug>
+#include<cstddef>
+#include<QSerialPortInfo>
 
 
 QT_BEGIN_NAMESPACE

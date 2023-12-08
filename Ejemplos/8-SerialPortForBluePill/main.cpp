@@ -1,5 +1,3 @@
-
-
 #include "mainwidget.h"
 #include <QApplication>
 //#include <QIcon>

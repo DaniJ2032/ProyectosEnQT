@@ -1,23 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QMessageBox>
-#include <iostream>
-#include <QFileInfo>
-
-#include<QDebug>
-#include<cstddef>
-
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     m_serial(new QSerialPort(this))
-{   
+{
     // Set the UI to the main program
     ui->setupUi(this);
 
     // Set serial port status as disconnected when program starts
-    ui->connectionStatus->setText("Disconnected");
+    ui->connectionStatus->setText("Desconectado");
 
     // Set the serial port configurations
     m_serial->setPortName("COM3");
@@ -40,10 +33,10 @@ MainWindow::~MainWindow()
 void MainWindow::openSerialPort()
 {
     if (m_serial->open(QIODevice::ReadWrite)) {
-        ui->connectionStatus->setText("Connected");
-        ui->connectButton->setText("Disconnect");
+        ui->connectionStatus->setText("Conectado");
+        ui->connectButton->setText("Desconectado");
     } else {
-        ui->connectionStatus->setText("Couldn't connect");
+        ui->connectionStatus->setText("No se puede conectar al puerto");
     }
 }
 
@@ -53,8 +46,8 @@ void MainWindow::closeSerialPort()
         m_serial->close();
 
         if (!m_serial->isOpen()) {
-            ui->connectionStatus->setText("Disconnected");
-            ui->connectButton->setText("Connect");
+            ui->connectionStatus->setText("Desconectado");
+            ui->connectButton->setText("Conectado");
         }
     }
 }
@@ -97,7 +90,6 @@ void MainWindow::readData()
             case 4:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn1_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn1_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -108,7 +100,6 @@ void MainWindow::readData()
             case 6:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn2_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn2_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -119,7 +110,6 @@ void MainWindow::readData()
             case 8:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn3_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn3_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -130,7 +120,6 @@ void MainWindow::readData()
             case 10:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn4_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn4_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -141,7 +130,6 @@ void MainWindow::readData()
             case 12:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn5_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn5_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -152,7 +140,6 @@ void MainWindow::readData()
             case 14:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn6_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn6_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -163,7 +150,6 @@ void MainWindow::readData()
             case 16:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn7_label->setText(QString::number((double)analogValue*10/4095,'f',2));
-                ui->analogIn7_slider->setValue(analogValue*100/4095);
                 positionToRead++;
                 break;
 
@@ -174,7 +160,6 @@ void MainWindow::readData()
             case 18:
                 analogValue += (byte & 0xFF) << 8;
                 ui->analogIn8_label->setText(QString::number(getVoltageFromBytes(analogValue, 4095, -5, 5),'f',2) );
-                ui->analogIn8_slider->setValue(getVoltageFromBytes(analogValue, 4095, -5, 5)*10);
                 positionToRead++;
                 break;
 
@@ -202,7 +187,7 @@ void MainWindow::readData()
                 break;
 
             default:
-                qDebug() << "Error on rx!!";
+                qDebug() << "Error en trama recibida!!";
                 break;
         }
     }
@@ -255,30 +240,6 @@ void MainWindow::sendChangesToBluepill(){
     ui->digitalInput7->isChecked() ? transmitedFrame[2] |= 0b01000000 : transmitedFrame[2] &= 0b10111111;
     ui->digitalInput8->isChecked() ? transmitedFrame[2] |= 0b10000000 : transmitedFrame[2] &= 0b01111111;
 
-    // Analgog Input 1
-    transmitedFrame[3] = getBytesFromVoltage(ui->analogIn1_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[4] = (getBytesFromVoltage(ui->analogIn1_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 2
-    transmitedFrame[5] = getBytesFromVoltage(ui->analogIn2_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[6] = (getBytesFromVoltage(ui->analogIn2_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 3
-    transmitedFrame[7] = getBytesFromVoltage(ui->analogIn3_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[8] = (getBytesFromVoltage(ui->analogIn3_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 4
-    transmitedFrame[9] = getBytesFromVoltage(ui->analogIn4_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[10] = (getBytesFromVoltage(ui->analogIn4_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 5
-    transmitedFrame[11] = getBytesFromVoltage(ui->analogIn5_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[12] = (getBytesFromVoltage(ui->analogIn5_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 6
-    transmitedFrame[13] = getBytesFromVoltage(ui->analogIn6_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[14] = (getBytesFromVoltage(ui->analogIn6_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 7
-    transmitedFrame[15] = getBytesFromVoltage(ui->analogIn7_slider->value(), 4095, 0, 100) & 0xFF;
-    transmitedFrame[16] = (getBytesFromVoltage(ui->analogIn7_slider->value(), 4095, 0, 100) >> 8) & 0xFF;
-    // Analgog Input 8
-    transmitedFrame[17] = getBytesFromVoltage((double)ui->analogIn8_slider->value(), 4095, -50, 50) & 0xFF;
-    transmitedFrame[18] = (getBytesFromVoltage((double)ui->analogIn8_slider->value(), 4095, -50, 50) >> 8) & 0xFF;
     // Digital Outputs
     ui->digitalOutput1->isChecked() ? transmitedFrame[19] |= 0b00000001 : transmitedFrame[19] &= 0b11111110;
     ui->digitalOutput2->isChecked() ? transmitedFrame[19] |= 0b00000010 : transmitedFrame[19] &= 0b11111101;
@@ -298,9 +259,9 @@ void MainWindow::sendChangesToBluepill(){
     int bytesTransmitted = m_serial->write(transmitedFrame, 24);
 
     if(bytesTransmitted != 24)
-        qDebug() << "ERROR TX";
+        qDebug() << "Error al enviar trama";
     else
-        qDebug() << "TX OK";
+        qDebug() << "Trama enviada";
 }
 
 void MainWindow::on_connectButton_clicked()
